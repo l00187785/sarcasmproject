@@ -31,8 +31,5 @@ jobs:
     - name: Build Docker image
       run: docker build -t sarcasm-detector .
 
-    - name: Push to Docker Hub (optional)
-      run: echo "Push step here"
-
     - name: Deploy to Kubernetes
       run: echo "kubectl apply -f k8s/deployment.yaml"

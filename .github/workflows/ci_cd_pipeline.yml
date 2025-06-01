@@ -31,5 +31,29 @@ jobs:
     - name: Build Docker image
       run: docker build -t sarcasm-detector .
 
-    - name: Deploy to Kubernetes
-      run: echo "kubectl apply -f k8s/deployment.yaml"
+    - name: Save Docker image as artifact
+      run: docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
+
+    - name: Upload Docker image artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: sarcasm-image
+        path: sarcasm-detector.tar.gz
+
+  deploy:
+    runs-on: self-hosted  # assumes your Swarm node is self-hosted runner
+    needs: build
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Download Docker image artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: sarcasm-image
+
+    - name: Load Docker image
+      run: gunzip -c sarcasm-detector.tar.gz | docker load
+
+    - name: Deploy to Docker Swarm
+      run: docker stack deploy -c swarm-deploy.yml sarcasmstack

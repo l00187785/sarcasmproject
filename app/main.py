@@ -1,11 +1,16 @@
+import os
 from flask import Flask, request, render_template
 import joblib
-from app.predictor import predict_sarcasm
+from predictor import predict_sarcasm
 
-app = Flask(__name__, template_folder='../templates')
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TEMPLATE_DIR = os.path.join(BASE_DIR, '..', 'templates')
+MODEL_DIR = os.path.join(BASE_DIR, 'model')
 
-model = joblib.load('model/sarcasm_model.pkl')
-vectorizer = joblib.load('model/vectorizer.pkl')
+app = Flask(__name__, template_folder=TEMPLATE_DIR)
+
+vectorizer = joblib.load(os.path.join(MODEL_DIR, 'vectorizer.pkl'))
+model = joblib.load(os.path.join(MODEL_DIR, 'sarcasm_model.pkl'))
 
 @app.route('/', methods=['GET', 'POST'])
 def home():

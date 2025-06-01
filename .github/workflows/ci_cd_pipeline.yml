@@ -35,7 +35,7 @@ jobs:
       run: docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
 
     - name: Upload Docker image artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4.3.3
       with:
         name: sarcasm-image
         path: sarcasm-detector.tar.gz

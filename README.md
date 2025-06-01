@@ -18,6 +18,14 @@ This project is a Flask-based sarcasm detection API using a trained scikit-learn
 - `docker-compose` (optional, for local multi-container testing)
 
 ---
+## Branching Strategy
+
+- `main`: Production-ready code.
+- `dev`: Integration branch for tested features.
+- `feature/...`: Feature branches are created from `dev` and merged back into `dev` after testing.
+
+This strategy ensures stable main releases and flexible development.
+--------
 
 ## Setup & Running with Docker Swarm
 

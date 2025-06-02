@@ -17,7 +17,8 @@ def clean_text(text):
     return text.strip()
 
 def predict_sarcasm(text, model, vectorizer):
-    text = clean_text(text)
+    if not text.strip():  # Check for empty or whitespace-only input
+        raise ValueError("Input text cannot be empty")
     X = vectorizer.transform([text])
 
     if not np.any(X.toarray()):
@@ -25,4 +26,3 @@ def predict_sarcasm(text, model, vectorizer):
 
     pred = model.predict(X)
     return "That's so sarcastic of you!" if pred[0] == 1 else "Sounds genuine."
-

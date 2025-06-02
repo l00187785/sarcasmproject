@@ -38,7 +38,7 @@ jobs:
       run: ls -lh sarcasm-detector.tar.gz
 
     - name: Upload Docker image artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v2
       with:
         name: sarcasm-image
         path: sarcasm-detector.tar.gz

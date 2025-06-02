@@ -1,4 +1,4 @@
-mport os
+import os
 from flask import Flask, request, render_template
 import joblib
 from predictor import predict_sarcasm

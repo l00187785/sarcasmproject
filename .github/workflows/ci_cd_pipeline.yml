@@ -34,6 +34,9 @@ jobs:
     - name: Save Docker image as artifact
       run: docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
 
+    - name: Verify artifact file exists
+      run: ls -lh sarcasm-detector.tar.gz
+
     - name: Upload Docker image artifact
       uses: actions/upload-artifact@v3
       with:

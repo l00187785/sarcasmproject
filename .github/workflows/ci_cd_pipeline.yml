@@ -66,5 +66,9 @@ jobs:
     - name: Load Docker image
       run: gunzip -c sarcasm-detector.tar.gz | docker load
 
+    - name: Initialize Docker Swarm
+      run: |
+        docker info | grep 'Swarm: active' || docker swarm init
+
     - name: Deploy to Docker Swarm
       run: docker stack deploy -c swarm-deploy.yml sarcasmstack

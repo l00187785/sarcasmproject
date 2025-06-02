@@ -32,16 +32,18 @@ jobs:
       run: docker build -t sarcasm-detector .
 
     - name: Save Docker image as artifact
-      run: docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
+      run: |
+        docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
+        echo "Docker image saved as sarcasm-detector.tar.gz"
 
     - name: Verify artifact file exists
       run: ls -lh sarcasm-detector.tar.gz
 
     - name: Upload Docker image artifact
       uses: actions/upload-artifact@v2
-      with:
-        name: sarcasm-image
-        path: sarcasm-detector.tar.gz
+        with:
+      name: sarcasm-image
+      path: sarcasm-detector.tar.gz
 
   deploy:
     runs-on: self-hosted  # assumes your Swarm node is self-hosted runner

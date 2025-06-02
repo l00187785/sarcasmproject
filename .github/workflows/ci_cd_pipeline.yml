@@ -29,31 +29,36 @@ jobs:
         pytest tests/
 
     - name: Build Docker image
-      run: docker build -t sarcasm-detector .
+  run: |
+    docker build -t sarcasm-detector . || (echo "Docker build failed!" && exit 1)
 
     - name: Save Docker image as artifact
-      run: |
-        docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
-        echo "Docker image saved as sarcasm-detector.tar.gz"
+    run: |
+    docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
+    echo "Docker image saved as sarcasm-detector.tar.gz"
 
     - name: Verify artifact file exists
-      run: ls -lh sarcasm-detector.tar.gz
+    run: |
+    if [ ! -f sarcasm-detector.tar.gz ]; then
+      echo "Artifact file not found!"
+      exit 1
+    fi
 
     - name: Upload Docker image artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: sarcasm-image
-        path: sarcasm-detector.tar.gz
+    uses: actions/upload-artifact@v4
+    with:
+    name: sarcasm-image
+    path: sarcasm-detector.tar.gz
 
   deploy:
     runs-on: self-hosted  # assumes your Swarm node is self-hosted runner
     needs: build
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
 
     - name: Download Docker image artifact
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: sarcasm-image
 

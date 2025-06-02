@@ -17,9 +17,7 @@ def home():
     prediction = ""
     if request.method == 'POST':
         text = request.form['text']
+        if not text.strip():  # Check for empty or whitespace-only input
+            return "Error: Input text cannot be empty", 400  # Return HTTP 400 status code
         prediction = predict_sarcasm(text, model, vectorizer)
     return render_template('index.html', prediction=prediction)
-
-if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
-

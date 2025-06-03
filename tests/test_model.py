@@ -1,8 +1,10 @@
+import pytest
+from app.predictor import predict_sarcasm
+
 def test_model_prediction():
-    import joblib
-    model = joblib.load('model/sarcasm_model.pkl')
-    vectorizer = joblib.load('model/vectorizer.pkl')
-    test_text = ["Oh wonderful, more traffic"]
-    X = vectorizer.transform(test_text)
-    pred = model.predict(X)
-    assert pred[0] in [0, 1]
+    result = predict_sarcasm("Oh wonderful, more traffic")
+    assert result in ["That's so sarcastic of you!", "Sounds genuine."]
+
+def test_model_empty_input():
+    with pytest.raises(ValueError):
+        predict_sarcasm("")

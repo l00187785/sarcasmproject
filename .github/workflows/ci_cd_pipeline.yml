@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2 # This action pulls the latest code from the repository so the pipeline can work with it.
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -33,27 +33,32 @@ jobs:
 
     - name: Save Docker image as artifact
       run: docker save sarcasm-detector | gzip > sarcasm-detector.tar.gz
+    
+    - name: Verify artifact file exists
+      run: ls -lh sarcasm-detector.tar.gz
 
-    - name: Upload Docker image artifact
+    - name: Upload Docker image artifact # Uploads the Docker image as an artifact to GitHub
       uses: actions/upload-artifact@v3
       with:
         name: sarcasm-image
         path: sarcasm-detector.tar.gz
 
   deploy:
-    runs-on: self-hosted  # assumes your Swarm node is self-hosted runner
+    runs-on: self-hosted  # It runs on a self-hosted runner installed on my Docker Swarm manager node.
     needs: build
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v2 
 
     - name: Download Docker image artifact
       uses: actions/download-artifact@v3
       with:
         name: sarcasm-image
 
-    - name: Load Docker image
+    - name: Load Docker image   # Uncompresses and loads the Docker image into the self-hosted Docker engine
       run: gunzip -c sarcasm-detector.tar.gz | docker load
 
-    - name: Deploy to Docker Swarm
+    - name: Deploy to Docker Swarm.  #deploys the application stack using a Swarm deployment file (swarm-deploy.yml)
       run: docker stack deploy -c swarm-deploy.yml sarcasmstack
+      
+# This workflow automates the entire process from code changes to a running application, ensuring consistency and efficiency.

@@ -1,0 +1,13 @@
+prefix=/workspaces/sarcasmproject/.conda
+exec_prefix=/workspaces/sarcasmproject/.conda
+libdir=/workspaces/sarcasmproject/.conda/lib
+sharedlibdir=/workspaces/sarcasmproject/.conda/lib
+includedir=/workspaces/sarcasmproject/.conda/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
